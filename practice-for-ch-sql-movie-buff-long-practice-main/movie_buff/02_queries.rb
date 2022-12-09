@@ -13,9 +13,9 @@ def bad_years
   #return years where all movies had a score < 8 
   #don't return years where movies had a score > 8
   Movie 
-    .where.no()
+    .select(:yr)
     .group(:yr)
-    .having('MAX')
+    .having('MAX(score) < 8')
 end
 
 def cast_list(title)
