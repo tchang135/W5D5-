@@ -100,7 +100,7 @@ def directed_by_one_of(them)
   # Note: Directors appear in the 'actors' table.
 
   Movie 
-    .joins(:diretor)
+    .joins(:director)
     .where( actors: {name: them} )
     .select(:id, :title)
 end
