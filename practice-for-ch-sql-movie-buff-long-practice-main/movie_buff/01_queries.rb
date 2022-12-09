@@ -75,12 +75,12 @@ def biggest_cast
   #limit top 3
   #select  movie id and movie title
 
-  # Movie
-  # .joins(:castings)
-  # .select( 'movies.id, title')
-  # .group(:id)
-  # .order( 'COUNT(actors.id) DESC')
-  # .limit(3)
+  Movie
+  .joins(:actors)
+  .select( 'movies.id, title')
+  .group(:id)
+  .order( 'COUNT(actors.id) DESC')
+  .limit(3)
   
 end
 
