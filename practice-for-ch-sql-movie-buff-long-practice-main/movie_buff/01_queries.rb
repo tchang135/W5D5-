@@ -6,7 +6,7 @@ def it_was_ok
   # You can use ranges (a..b) inside a where method.
   #
   # Find the id, title, and score of all movies with scores between 2 and 3.
-  Movies.where(score: 2..3).select(:id, :title, :score)
+  Movie.where(score: 2..3).select(:id, :title, :score)
 
 end
 
@@ -21,20 +21,38 @@ def harrison_ford
   #
   # Find the id and title of all movies in which Harrison Ford appeared but not
   # as a lead actor.
-  Movies.joins(:actors).where( actors: { name: 'Harrison Ford'} ).where( castings: { 'ord != 1' } )
 
-  SELECT 
-    movies.id, movies.title
-  FROM 
-    movies 
-  JOIN 
-    castings ON movies.id = castings.movie_id 
-  JOIN 
-    actors ON castings.actor_id = actors.id 
-  WHERE 
-    actors.name = 'Harrison Ford' AND castings.ord != 1 
+  Movie
+  .joins(:actors)
+  .where( 'castings.ord !=1' )
+  .where( actors: {name: 'Harrison Ford'} )
+  .select( :id, :title )
+  
+  # Actor
+  #   .joins(:movies)
+  #   .where( 'castings.ord != 1' )
+  #   .where(name: 'Harrison Ford')
+  #   .select( 'movies.id, movies.title' )
 
+    # Actor
+    # .joins(:movies)
+    # .where.not(castings: {ord: 1} )
+    # .where(name: 'Harrison Ford')
+    # .select( 'movies.id, movies.title' )
+  
 end
+
+# SELECT 
+#   movies.id, movies.title
+# FROM 
+#   movies 
+# JOIN 
+#   castings ON movies.id = castings.movie_id 
+# JOIN 
+#   actors ON castings.actor_id = actors.id 
+# WHERE 
+#   actors.name = 'Harrison Ford' AND castings.ord != 1 
+
 
 def biggest_cast
   # Consider the following:
@@ -50,6 +68,19 @@ def biggest_cast
   #
   # Find the id and title of the 3 movies with the largest casts (i.e., most
   # actors).
+
+  #want to collapse movie id ( no duplicates)
+  #count how many actor IDs per movie
+  #order DESC 
+  #limit top 3
+  #select  movie id and movie title
+
+  Movie
+  .joins(:castings)
+  .select( 'movies.id, title')
+  .group(:id)
+  .order( 'COUNT(actors.id) DESC')
+  .limit(3)
   
 end
 
